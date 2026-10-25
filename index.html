@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Учебный пример адаптивной вёрстки и базовой доступности">
+  <title>Адаптивный учебный каталог</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Перейти к основному содержимому</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="#top">Учебный каталог</a>
+      <nav class="main-nav" aria-label="Основная навигация">
+        <a href="#catalog" aria-current="page">Каталог</a>
+        <a href="#request">Заявка</a>
+        <a href="#audit">Проверка</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero__content">
+        <p class="eyebrow">АДАПТИВНЫЙ УЧЕБНЫЙ ПРИМЕР</p>
+        <h1 id="hero-title">Рабочее пространство на любом экране</h1>
+        <p class="hero__lead">Один интерфейс меняет компоновку, выбирает подходящее изображение и сохраняет доступность с клавиатуры.</p>
+        <a class="button" href="#catalog">Посмотреть карточки</a>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         РАЗДЕЛ: АДАПТИВНЫЕ ИЗОБРАЖЕНИЯ
+         Демонстрирует picture, source media (art direction),
+         srcset, sizes и fallback src.
+         ============================================================ -->
+    <section class="section" id="responsive-images" aria-labelledby="resp-images-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">АДАПТИВНЫЕ ИЗОБРАЖЕНИЯ</p>
+          <h2 id="resp-images-title">picture, srcset и sizes</h2>
+        </div>
+        <p>Браузер выбирает подходящий источник сам — по ширине viewport и плотности экрана. Проверяйте через DevTools → Network (фильтр Img) или <code>document.querySelector('img').currentSrc</code> в консоли.</p>
+      </div>
+
+      <div class="resp-img-demo">
+
+        <!--
+          <picture> — контейнер для art direction и/или srcset-вариантов.
+          Сам по себе он ничего не отображает; браузер перебирает
+          дочерние <source> сверху вниз, выбирает первый подходящий
+          и загружает его. Если ни один <source> не подошёл,
+          браузер использует fallback <img>.
+        -->
+        <picture>
+
+          <!--
+            ART DIRECTION: <source media="(max-width: 479px)">
+            Атрибут media задаёт Media Query для viewport.
+            Если условие истинно, браузер использует этот source.
+            Здесь: при ширине <480 px выбирается вертикальная композиция
+            (480×560) — она лучше подходит для портретной ориентации.
+
+            Примечание для растровых изображений:
+              srcset="img-480.jpg 1x, img-960.jpg 2x"   (плотность)
+              srcset="img-480.jpg 480w, img-960.jpg 960w" (ширина)
+            SVG векторный и не требует вариантов по плотности.
+          -->
+          <source
+            media="(max-width: 479px)"
+            srcset="images/workspace-mobile.svg"
+          >
+
+          <!--
+            ART DIRECTION: средние экраны (480–959 px).
+            Горизонтальная композиция (480×320) — компактнее и
+            уместнее для среднего viewport.
+
+            sizes описывает, какую долю экрана займёт изображение —
+            браузер использует это, чтобы выбрать нужный вариант из srcset.
+            Пример для JPEG с несколькими вариантами:
+              sizes="(min-width: 768px) 50vw, 100vw"
+            читается: «при viewport ≥768 px изображение занимает 50vw,
+            иначе 100vw».
+          -->
+          <source
+            media="(min-width: 480px) and (max-width: 959px)"
+            srcset="images/workspace-480.svg"
+            sizes="100vw"
+          >
+
+          <!--
+            FALLBACK <img> — обязателен внутри <picture>.
+            Браузер показывает его, если ни один <source> не подошёл
+            (ширина ≥960 px), или если <picture> не поддерживается.
+
+            src — наиболее подходящий файл для широкого экрана.
+
+            srcset на <img> — дополнительные варианты по ширине:
+            браузер выбирает среди них с учётом атрибута sizes.
+
+            sizes="(min-width: 960px) 70vw, 100vw":
+              при viewport ≥960 px изображение занимает ~70vw,
+              иначе 100vw (но эти случаи покрыты <source> выше).
+
+            width и height соответствуют реальным размерам SVG (960×640).
+            Это позволяет браузеру зарезервировать место до загрузки
+            и избежать прыжка контента (Cumulative Layout Shift).
+
+            alt описывает смысл изображения для скринридеров
+            и ситуации, когда картинка не загрузилась.
+          -->
+          <img
+            src="images/workspace-960.svg"
+            srcset="images/workspace-960.svg 960w, images/workspace-480.svg 480w"
+            sizes="(min-width: 960px) 70vw, 100vw"
+            width="960"
+            height="640"
+            alt="Рабочее пространство с лампой, книгами и органайзером"
+            class="resp-img-demo__image"
+          >
+        </picture>
+
+        <p class="resp-img-demo__caption">
+          <strong>Как проверить:</strong> DevTools → Network → фильтр «Img», меняйте ширину окна. До 480&nbsp;px —
+          <code>workspace-mobile.svg</code> (вертикальная); 480–959&nbsp;px — <code>workspace-480.svg</code>; 960&nbsp;px и шире — <code>workspace-960.svg</code>.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="catalog" aria-labelledby="catalog-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FLEX + GRID + MEDIA QUERIES</p>
+          <h2 id="catalog-title">Компактный каталог</h2>
+        </div>
+        <p>Фильтр и карточки показывают основные механизмы адаптивного интерфейса, но не являются готовым многостраничным проектом.</p>
+      </div>
+
+      <div class="catalog-layout">
+        <aside class="filters" aria-labelledby="filters-title">
+          <h3 id="filters-title">Фильтр</h3>
+          <fieldset>
+            <legend>Категория</legend>
+            <label><input type="checkbox" name="category" value="light"> Свет</label>
+            <label><input type="checkbox" name="category" value="storage"> Организация</label>
+          </fieldset>
+        </aside>
+
+        <div class="product-grid">
+          <article class="product-shell product-shell--wide">
+            <div class="product-card">
+              <img class="product-card__visual" src="images/product-lamp.svg" width="800" height="600" alt="Синяя настольная лампа на рабочем столе">
+              <div class="product-card__body">
+                <p class="product-card__meta">Свет</p>
+                <h3>Настольная лампа</h3>
+                <p>Карточка меняет внутреннюю компоновку по ширине собственного контейнера.</p>
+                <a class="button button--small" href="#request">Уточнить наличие</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-shell">
+            <div class="product-card">
+              <img class="product-card__visual" src="images/product-books.svg" width="800" height="600" alt="Книги в деревянной подставке">
+              <div class="product-card__body">
+                <p class="product-card__meta">Организация</p>
+                <h3>Подставка для книг</h3>
+                <p>Сетка использует доступную ширину и не создаёт горизонтальную прокрутку страницы.</p>
+                <a class="button button--small" href="#request">Задать вопрос</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-shell">
+            <div class="product-card">
+              <img class="product-card__visual" src="images/product-organizer.svg" width="800" height="600" alt="Настольный органайзер с карандашами и заметками">
+              <div class="product-card__body">
+                <p class="product-card__meta">Аксессуары</p>
+                <h3>Органайзер</h3>
+                <p>На узком экране карточки идут последовательно, на широком — образуют сетку.</p>
+                <a class="button button--small" href="#request">Выбрать модель</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section request-section" id="request" aria-labelledby="request-title">
+      <div class="request-intro">
+        <div>
+          <p class="eyebrow">АДАПТИВНАЯ ФОРМА</p>
+          <h2 id="request-title">Заявка на консультацию</h2>
+          <p>Заполните три связанных поля. Подписи остаются видимыми, а форма перестраивается под доступную ширину экрана.</p>
+          <p class="request-intro__note">Компактный вариант открывается в модальном окне: фокус переходит внутрь и возвращается к кнопке после закрытия.</p>
+        </div>
+        <button class="button button--secondary" type="button" data-open-dialog>Открыть быструю форму</button>
+      </div>
+
+      <form class="request-form" action="#request" method="get" aria-label="Заявка на консультацию">
+        <div class="field">
+          <label for="name">Имя</label>
+          <input id="name" name="name" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="email">Электронная почта</label>
+          <input id="email" name="email" type="email" autocomplete="email" aria-describedby="email-hint" required>
+          <p class="field-hint" id="email-hint">Например, student@example.ru</p>
+        </div>
+        <div class="field field--full">
+          <label for="topic">Тема вопроса</label>
+          <select id="topic" name="topic">
+            <option>Адаптивная сетка</option>
+            <option>Изображения</option>
+            <option>Доступность</option>
+          </select>
+        </div>
+        <div class="form-actions field--full">
+          <button class="button" type="submit">Подготовить заявку</button>
+          <p>Все поля обязательны. Отправка в учебном примере не выполняется.</p>
+        </div>
+      </form>
+
+      <!--
+        УЧЕБНЫЙ ПРИМЕР: состояние ошибки поля формы.
+        Это СТАТИЧЕСКАЯ демонстрация A11y-разметки.
+        В реальном интерфейсе aria-invalid="true" появляется только
+        после обнаружения ошибки (обычно при submit или blur).
+        JavaScript-валидация в задачи данного demo не входит.
+      -->
+      <div class="field-error-demo" aria-label="Демонстрация ошибочного состояния поля">
+        <p class="eyebrow">ДОСТУПНОСТЬ ФОРМЫ — ОШИБОЧНОЕ СОСТОЯНИЕ</p>
+        <p class="field-error-demo__note">Статический учебный пример. Показывает семантическую связь между полем, подписью и сообщением об ошибке — без JS-валидации.</p>
+
+        <div class="field">
+          <!--
+            <label for="error-email"> связывает подпись с полем.
+            Скринридер озвучивает подпись при фокусе на поле.
+          -->
+          <label for="error-email">Электронная почта</label>
+
+          <!--
+            aria-invalid="true" — сообщает скринридеру, что поле
+            содержит некорректное значение. В реальном проекте
+            этот атрибут добавляется через JS только после проверки.
+
+            aria-describedby="error-email-msg" — связывает поле
+            с сообщением об ошибке. Скринридер зачитает сообщение
+            сразу после подписи и текущего значения поля.
+
+            Обратите внимание: aria-describedby можно перечислять:
+              aria-describedby="hint-id error-id"
+            — сначала будет зачитана подсказка, затем сообщение об ошибке.
+          -->
+          <input
+            id="error-email"
+            type="email"
+            name="error-email"
+            value="student[at]example"
+            aria-invalid="true"
+            aria-describedby="error-email-msg"
+            autocomplete="off"
+          >
+
+          <!--
+            role="alert" — браузер немедленно объявляет содержимое
+            этого элемента скринридеру, как только оно появляется в DOM
+            (live region). В реальном JS-сценарии сообщение добавляется
+            после обнаружения ошибки — и скринридер произносит его
+            без необходимости переводить фокус вручную.
+
+            В этом статическом примере role="alert" показывает
+            правильную разметку, но объявление при загрузке страницы
+            не происходит — так и должно быть в учебном demo.
+          -->
+          <p class="field-error" id="error-email-msg" role="alert">
+            Введите адрес в формате student@example.ru
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="table-title">
+      <p class="eyebrow">ЛОКАЛЬНАЯ ПРОКРУТКА ТАБЛИЦЫ</p>
+      <h2 id="table-title">Сравнение вариантов</h2>
+      <div class="table-scroll" tabindex="0" aria-label="Таблица прокручивается горизонтально на узком экране">
+        <table>
+          <caption>Параметры товаров учебного каталога</caption>
+          <thead>
+            <tr>
+              <th scope="col">Товар</th>
+              <th scope="col">Категория</th>
+              <th scope="col">Материал</th>
+              <th scope="col">Гарантия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Лампа</th><td>Свет</td><td>Металл</td><td>24 месяца</td></tr>
+            <tr><th scope="row">Подставка</th><td>Организация</td><td>Дерево</td><td>12 месяцев</td></tr>
+            <tr><th scope="row">Органайзер</th><td>Аксессуары</td><td>Пластик</td><td>12 месяцев</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section audit" id="audit" aria-labelledby="audit-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">ПРОБЛЕМА → ПРОВЕРКА → ИСПРАВЛЕНИЕ → ПОВТОРНАЯ ПРОВЕРКА</p>
+          <h2 id="audit-title">Проверяем доступность ссылки</h2>
+        </div>
+        <p>Объект проверки — ссылка «Открыть пояснение» в карточке уведомления. Сравните её контраст и видимый клавиатурный фокус в двух состояниях.</p>
+      </div>
+
+      <ol class="audit-flow" aria-label="Последовательность проверки доступности">
+        <li><span>1</span><strong>Проблема</strong><p>Ссылка сливается с фоном, а клавиатурный фокус не виден.</p></li>
+        <li><span>2</span><strong>Ручная проверка</strong><p>Перейдите к ссылке клавишей Tab и оцените контраст.</p></li>
+        <li><span>3</span><strong>Исправление</strong><p>Верните читаемый цвет, подчёркивание и заметную рамку фокуса.</p></li>
+        <li><span>4</span><strong>Повторная проверка</strong><p>Повторите тот же маршрут и убедитесь, что дефект устранён.</p></li>
+      </ol>
+
+      <nav class="audit-switch" aria-label="Состояние примера для аудита">
+        <a class="button button--secondary" href="#audit-before">До исправления</a>
+        <a class="button button--secondary" href="#audit-after">После исправления</a>
+      </nav>
+
+      <div class="audit-anchor" id="audit-before" tabindex="-1"></div>
+      <div class="audit-anchor" id="audit-after" tabindex="-1"></div>
+
+      <div class="audit-demo" aria-label="Проверяемая карточка уведомления">
+        <p class="audit-demo__state audit-demo__state--before">Состояние: дефект</p>
+        <p class="audit-demo__state audit-demo__state--after">Состояние: исправлено</p>
+        <p class="audit-demo__label">ПРОВЕРЯЕМЫЙ ЭЛЕМЕНТ</p>
+        <h3>Статус заказа обновлён</h3>
+        <p class="audit-demo__text">Обратите внимание на контраст текста и видимость клавиатурного фокуса ссылки.</p>
+        <a class="audit-demo__link" href="#audit-explanation">Открыть пояснение</a>
+      </div>
+
+      <aside class="audit-explanation" id="audit-explanation" aria-labelledby="audit-explanation-title">
+        <h3 id="audit-explanation-title">Результат проверки</h3>
+        <p>В состоянии «до» ссылка намеренно малоконтрастная, а видимый фокус скрыт. В состоянии «после» контраст, подчёркивание и фокус восстановлены. По умолчанию открыт исправленный вариант.</p>
+        <p><strong>Lighthouse — дополнительная проверка.</strong> Автоматический отчёт помогает найти часть проблем, но не заменяет ручной проход с клавиатурой и визуальную оценку интерфейса.</p>
+      </aside>
+    </section>
+  </main>
+
+  <dialog class="quick-dialog" id="quick-dialog" aria-labelledby="quick-dialog-title" aria-describedby="quick-dialog-description">
+    <form class="quick-dialog__form" method="dialog">
+      <div class="quick-dialog__header">
+        <div>
+          <p class="eyebrow">КОМПАКТНАЯ ФОРМА</p>
+          <h2 id="quick-dialog-title">Быстрый вопрос</h2>
+        </div>
+        <button class="dialog-close" type="submit" value="cancel" formnovalidate aria-label="Закрыть диалог">×</button>
+      </div>
+      <p id="quick-dialog-description">Оставьте контакты и выберите тему. Это учебное окно: данные никуда не отправляются.</p>
+      <div class="field">
+        <label for="quick-name">Имя</label>
+        <input id="quick-name" name="quick-name" autocomplete="name" required autofocus>
+      </div>
+      <div class="field">
+        <label for="quick-email">Электронная почта</label>
+        <input id="quick-email" name="quick-email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="quick-topic">Тема вопроса</label>
+        <select id="quick-topic" name="quick-topic">
+          <option>Адаптивная сетка</option>
+          <option>Изображения</option>
+          <option>Доступность</option>
+        </select>
+      </div>
+      <div class="quick-dialog__actions">
+        <button class="button" type="submit" value="save">Сохранить заявку</button>
+        <button class="button button--secondary" type="submit" value="cancel" formnovalidate>Отмена</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer class="site-footer">
+    <p>Учебный пример демонстрирует механизмы, но не является готовой контрольной работой.</p>
+  </footer>
+  <script src="js/dialog.js"></script>
+</body>
+</html>

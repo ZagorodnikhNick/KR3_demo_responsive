@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Настольная лампа</title>
+  <desc id="desc">Синяя настольная лампа освещает рабочую поверхность</desc>
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef4ff"/><stop offset="1" stop-color="#c9dcf8"/></linearGradient>
+    <linearGradient id="light" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff5bf" stop-opacity=".95"/><stop offset="1" stop-color="#fff5bf" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#wall)"/>
+  <rect y="430" width="800" height="170" fill="#a66d43"/>
+  <path d="M200 452h230l96 118H113z" fill="url(#light)" opacity=".7"/>
+  <rect x="250" y="192" width="34" height="267" rx="17" fill="#173d78"/>
+  <path d="M132 202h270l-56-124H188z" fill="#2457a6"/>
+  <circle cx="267" cy="202" r="43" fill="#ffd56d"/>
+  <ellipse cx="267" cy="462" rx="104" ry="22" fill="#173d78"/>
+  <rect x="492" y="335" width="176" height="34" rx="7" fill="#54ad91"/>
+  <rect x="472" y="369" width="214" height="34" rx="7" fill="#7aa7e8"/>
+</svg>

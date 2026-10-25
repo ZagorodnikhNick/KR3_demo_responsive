@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="320" viewBox="0 0 480 320" role="img" aria-labelledby="title desc">
+  <title id="title">Рабочий стол</title>
+  <desc id="desc">Лампа, книги и органайзер на светлом столе</desc>
+  <rect width="480" height="320" rx="28" fill="#eaf1fb"/>
+  <rect x="45" y="220" width="390" height="28" rx="10" fill="#9a6840"/>
+  <rect x="92" y="85" width="18" height="138" rx="9" fill="#2457a6"/>
+  <path d="M55 92h94l-20-46H75z" fill="#f0b429"/>
+  <circle cx="102" cy="92" r="18" fill="#fff4c8"/>
+  <rect x="180" y="160" width="108" height="24" rx="5" fill="#54ad91"/>
+  <rect x="168" y="184" width="128" height="24" rx="5" fill="#7aa7e8"/>
+  <rect x="325" y="135" width="72" height="86" rx="12" fill="#ffffff" stroke="#2457a6" stroke-width="6"/>
+  <path d="M338 153h46M338 169h46M338 185h31" stroke="#2457a6" stroke-width="7" stroke-linecap="round"/>
+</svg>
